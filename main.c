@@ -355,7 +355,7 @@ int main()
 		drawScrollBar(topList[posInd], curSize);
 
 		if(curDir->parent && !topList[posInd])
-			vita2d_pgf_draw_text(pgf, 20, 4 * FONT_Y_SPACE, (!curPosList[posInd]) ? GREEN : CYAN, FONT_SIZE, "..");
+			vita2d_pgf_draw_text(pgf, 20, 4 * FONT_Y_SPACE, (!curPosList[posInd]) ? BLUE : CYAN, FONT_SIZE, "..");
 
 		for(int i = topList[posInd]; i < curDir->numSubDirs && (i - topList[posInd]) < MAX_POSITION; i++)
 		{
@@ -363,7 +363,7 @@ int main()
 			int y = (5 * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
 			if(i == curPosList[posInd] - 1)
-				color = GREEN;
+				color = BLUE;
 
 			vita2d_pgf_draw_text(pgf, 20, y, color, FONT_SIZE, curDir->subdirs[i]->name + strlen(curDir->name));
 		}
@@ -376,7 +376,7 @@ int main()
 			int y = ((5 + curDir->numSubDirs) * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
 			if(i == curPosList[posInd] - 1 - curDir->numSubDirs)
-				color = GREEN;
+				color = BLUE;
 
 			int x = vita2d_pgf_draw_text(pgf, 20, y, color, FONT_SIZE, curDir->keys[i]->keyName);
 			if (max_x < x) max_x = x;
@@ -392,7 +392,7 @@ int main()
 			int y = ((5 + curDir->numSubDirs) * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
 			if(i == curPosList[posInd] - 1 - curDir->numSubDirs)
-				color = GREEN;
+				color = BLUE;
 
 			if(key->keyType == KEY_TYPE_INT)
 			{
