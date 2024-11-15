@@ -15,6 +15,7 @@ int topList[10] = {0};
 int curPosList[10] = {0};
 int posInd = 0;
 
+int enterButton = 0;
 
 void initSceAppUtil()
 {
@@ -24,6 +25,9 @@ void initSceAppUtil()
 	memset(&init_param, 0, sizeof(SceAppUtilInitParam));
 	memset(&boot_param, 0, sizeof(SceAppUtilBootParam));
 	sceAppUtilInit(&init_param, &boot_param);
+	
+	// System params
+  	sceAppUtilSystemParamGetInt(SCE_SYSTEM_PARAM_ID_ENTER_BUTTON, &enterButton);
 
 	// Set common dialog config
 	SceCommonDialogConfigParam config;
@@ -309,6 +313,9 @@ int main()
 	sceCtrlSetSamplingMode(SCE_CTRL_MODE_ANALOG);
 	initSceAppUtil();
 	initializeRegistryDirectory(&root);
+		
+	int SCE_CTRL_ENTER = enterButton ? SCE_CTRL_CROSS : SCE_CTRL_CIRCLE;
+	int SCE_CTRL_CANCEL = enterButton ? SCE_CTRL_CIRCLE : SCE_CTRL_CROSS;
 
 	vita2d_init();
 	pgf = vita2d_load_default_pgf();
@@ -466,7 +473,7 @@ int main()
 				topList[posInd]--;
 		}
 
-		if(pressedButtons & SCE_CTRL_CROSS)
+		if(pressedButtons & SCE_CTRL_ENTER)
 		{
 			if(curPosList[posInd] == 0)
 			{
@@ -515,7 +522,7 @@ int main()
 
 			}
 		}
-		else if(pressedButtons & SCE_CTRL_CIRCLE && curDir->parent)
+		else if(pressedButtons & SCE_CTRL_CANCEL && curDir->parent)
 		{
 			curDir = curDir->parent;
 			posInd--;
