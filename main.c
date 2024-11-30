@@ -290,7 +290,7 @@ int regMgrGetKeyInt(char *path, char *keyName)
 
 int main()
 {
-	curPosList[0] = 1;
+	curPosList[0] = 0;
 	topList[0] = 0;
 	int curSize = 0, ret = 0, imeStatus = 0, keyIndex = 0;
 	int holdButtons = 0, pressedButtons = 0;
@@ -358,18 +358,15 @@ int main()
 			keyIndex = 0;
 		}
 
-		curSize = curDir->numSubDirs + curDir->numKeys + 1;
+		curSize = curDir->numSubDirs + curDir->numKeys;
 		drawScrollBar(topList[posInd], curSize);
-
-		if(curDir->parent && !topList[posInd])
-			vita2d_pgf_draw_text(pgf, 20, 4 * FONT_Y_SPACE, (!curPosList[posInd]) ? BLUE : CYAN, FONT_SIZE, "..");
 
 		for(int i = topList[posInd]; i < curDir->numSubDirs && (i - topList[posInd]) < MAX_POSITION; i++)
 		{
 			uint32_t color = CYAN;
 			int y = (5 * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
-			if(i == curPosList[posInd] - 1)
+			if(i == curPosList[posInd])
 				color = BLUE;
 
 			vita2d_pgf_draw_text(pgf, 20, y, color, FONT_SIZE, curDir->subdirs[i]->name + strlen(curDir->name));
@@ -382,7 +379,7 @@ int main()
 			uint32_t color = WHITE;
 			int y = ((5 + curDir->numSubDirs) * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
-			if(i == curPosList[posInd] - 1 - curDir->numSubDirs)
+			if(i == curPosList[posInd] - curDir->numSubDirs)
 				color = BLUE;
 
 			int x = vita2d_pgf_draw_text(pgf, 20, y, color, FONT_SIZE, curDir->keys[i]->keyName);
@@ -398,7 +395,7 @@ int main()
 			uint32_t color = WHITE;
 			int y = ((5 + curDir->numSubDirs) * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
-			if(i == curPosList[posInd] - 1 - curDir->numSubDirs)
+			if(i == curPosList[posInd] - curDir->numSubDirs)
 				color = BLUE;
 
 			if(key->keyType == KEY_TYPE_INT)
@@ -454,7 +451,7 @@ int main()
 		{			
 			curPosList[posInd] = (curPosList[posInd] + 1) % curSize;
 
-			if(curPosList[posInd] - topList[posInd] >= MAX_POSITION && curSize > MAX_POSITION && topList[posInd] < (curSize - MAX_POSITION - 1))
+			if(curPosList[posInd] - topList[posInd] >= MAX_POSITION && curSize > MAX_POSITION && topList[posInd] < (curSize - MAX_POSITION))
 				topList[posInd]++;
 			else if(curPosList[posInd] == 0 && curSize > MAX_POSITION)
 				topList[posInd] = 0;
@@ -466,28 +463,18 @@ int main()
 				curPosList[posInd] = curSize - 1;
 
 				if(curSize > MAX_POSITION)
-				topList[posInd] = curSize - MAX_POSITION - 1;
+				topList[posInd] = curSize - MAX_POSITION;
 			}
 			
-			if(curPosList[posInd] <= topList[posInd] && topList[posInd] && curSize > MAX_POSITION)
+			if(curPosList[posInd] < topList[posInd] && topList[posInd] && curSize > MAX_POSITION)
 				topList[posInd]--;
 		}
 
 		if(pressedButtons & SCE_CTRL_ENTER)
 		{
-			if(curPosList[posInd] == 0)
+			if(curPosList[posInd] < curDir->numSubDirs && curDir->numSubDirs > 0)
 			{
-				if(curDir->parent) {
-					posInd--;
-					curDir = curDir->parent;
-				}
-
-				curPosList[posInd] = 0;
-				topList[posInd] = 0;
-			}
-			else if(curPosList[posInd]- 1 < curDir->numSubDirs && curDir->numSubDirs > 0)
-			{
-				curDir = curDir->subdirs[curPosList[posInd] - 1];
+				curDir = curDir->subdirs[curPosList[posInd]];
 
 				posInd++;
 				curPosList[posInd] = 0;
@@ -497,7 +484,7 @@ int main()
 			{
 				ret = -1;
 				memset(buf2, 0, 2048);
-				RegistryKey *key = curDir->keys[curPosList[posInd] - 1 - curDir->numSubDirs];
+				RegistryKey *key = curDir->keys[curPosList[posInd] - curDir->numSubDirs];
 
 				if(key->keyType == KEY_TYPE_INT)
 				{
@@ -517,7 +504,7 @@ int main()
 				{
 					initImeDialog(key->keyName, buf2, 2048);
 					writeDir = curDir;
-					keyIndex = curPosList[posInd] - 1 - curDir->numSubDirs;
+					keyIndex = curPosList[posInd] - curDir->numSubDirs;
 				}
 
 			}

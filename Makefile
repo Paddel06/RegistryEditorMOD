@@ -24,7 +24,7 @@ all: $(TARGET).vpk
 	$(TARGET).vpk
 
 eboot.bin: $(TARGET).velf
-	vita-make-fself -at 0xE -m 0x10000 $< $@
+	vita-make-fself $< $@
 
 %.velf: %.elf
 	vita-elf-create $< $@
