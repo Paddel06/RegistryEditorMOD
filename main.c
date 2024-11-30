@@ -195,12 +195,12 @@ void drawScrollBar(int pos, int n)
 {
 	if (n > MAX_POSITION)
 	{
-		vita2d_draw_rectangle(SCROLL_BAR_X, 4.0f * FONT_Y_SPACE, SCROLL_BAR_WIDTH, MAX_ENTRIES * FONT_Y_SPACE, GRAY);
+		vita2d_draw_rectangle(SCROLL_BAR_X, 5 * FONT_Y_SPACE - 18.0f, SCROLL_BAR_WIDTH, MAX_ENTRIES * FONT_Y_SPACE, GRAY);
 
-		int y = (4.0f * FONT_Y_SPACE) + ((pos * FONT_Y_SPACE) / (n * FONT_Y_SPACE)) * (MAX_ENTRIES * FONT_Y_SPACE);
-		int height = ((MAX_POSITION * FONT_Y_SPACE) / (n * FONT_Y_SPACE)) * (MAX_ENTRIES * FONT_Y_SPACE);
+		float y = (5 * FONT_Y_SPACE - 18.0f) + ((pos * FONT_Y_SPACE) / (n * FONT_Y_SPACE)) * (MAX_ENTRIES * FONT_Y_SPACE);
+		float height = ((MAX_POSITION * FONT_Y_SPACE) / (n * FONT_Y_SPACE)) * (MAX_ENTRIES * FONT_Y_SPACE);
 
-		vita2d_draw_rectangle(0, MIN(y, ((4.0f * FONT_Y_SPACE) + MAX_ENTRIES * FONT_Y_SPACE - height)), SCROLL_BAR_WIDTH, MAX(height, SCROLL_BAR_MIN_HEIGHT), AZURE);
+		vita2d_draw_rectangle(SCROLL_BAR_X, MIN(y, ((5 * FONT_Y_SPACE - 18.0f) + MAX_ENTRIES * FONT_Y_SPACE - height)), SCROLL_BAR_WIDTH, MAX(height, SCROLL_BAR_MIN_HEIGHT), AZURE);
 	}
 }
 
