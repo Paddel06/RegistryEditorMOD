@@ -363,11 +363,11 @@ int main()
 
 		for(int i = topList[posInd]; i < curDir->numSubDirs && (i - topList[posInd]) < MAX_POSITION; i++)
 		{
-			uint32_t color = CYAN;
+			uint32_t color = COLOR_DIR;
 			int y = (5 * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
 			if(i == curPosList[posInd])
-				color = BLUE;
+				color = COLOR_SEL;
 
 			vita2d_pgf_draw_text(pgf, 20, y, color, FONT_SIZE, curDir->subdirs[i]->name + strlen(curDir->name));
 		}
@@ -376,11 +376,11 @@ int main()
 		int max_x = 0;
 		for(int i = (topList[posInd] < curDir->numSubDirs) ? 0 : topList[posInd] - curDir->numSubDirs; i < curDir->numKeys && (i - (topList[posInd] - curDir->numSubDirs)) < MAX_POSITION; i++)
 		{
-			uint32_t color = WHITE;
+			uint32_t color = COLOR_KEY;
 			int y = ((5 + curDir->numSubDirs) * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
 			if(i == curPosList[posInd] - curDir->numSubDirs)
-				color = BLUE;
+				color = COLOR_SEL;
 
 			int x = vita2d_pgf_draw_text(pgf, 20, y, color, FONT_SIZE, curDir->keys[i]->keyName);
 			if (max_x < x) max_x = x;
@@ -392,20 +392,20 @@ int main()
 		for(int i = (topList[posInd] < curDir->numSubDirs) ? 0 : topList[posInd] - curDir->numSubDirs; i < curDir->numKeys && (i - (topList[posInd] - curDir->numSubDirs)) < MAX_POSITION; i++)
 		{
 			RegistryKey *key = curDir->keys[i];
-			uint32_t color = WHITE;
+			uint32_t color = COLOR_KEY;
 			int y = ((5 + curDir->numSubDirs) * FONT_Y_SPACE) + ((i - topList[posInd]) * FONT_Y_SPACE);
 
 			if(i == curPosList[posInd] - curDir->numSubDirs)
-				color = BLUE;
+				color = COLOR_SEL;
 
 			if(key->keyType == KEY_TYPE_INT)
 			{
 				ret = regMgrGetKeyInt(curDir->name, key->keyName);
 
 				if(ret == 0x800D000E)
-					vita2d_pgf_draw_textf(pgf, max_x, y, color, FONT_SIZE, "Not supported on this device");
+					vita2d_pgf_draw_textf(pgf, max_x, y, COLOR_UNA, FONT_SIZE, "Not supported on this device");
 				else
-					vita2d_pgf_draw_textf(pgf, max_x, y, color, FONT_SIZE, (ret < 0) ? "Error %08X" : "%d", ret);
+					vita2d_pgf_draw_textf(pgf, max_x, y, (ret < 0) ? COLOR_ERR : color, FONT_SIZE, (ret < 0) ? "Error %08X" : "%d", ret);
 			}
 			else if(key->keyType == KEY_TYPE_STR)
 			{
@@ -415,9 +415,9 @@ int main()
 				if(ret < 0)
 				{
 					if(ret == 0x800D000E)
-						vita2d_pgf_draw_textf(pgf, max_x, y, color, FONT_SIZE, "Not supported on this device");
+						vita2d_pgf_draw_textf(pgf, max_x, y, COLOR_UNA, FONT_SIZE, "Not supported on this device");
 					else
-						vita2d_pgf_draw_textf(pgf, max_x, y, color, FONT_SIZE, "Error %08X", ret);
+						vita2d_pgf_draw_textf(pgf, max_x, y, COLOR_ERR, FONT_SIZE, "Error %08X", ret);
 				}
 				else
 					vita2d_pgf_draw_text(pgf, max_x, y, color, FONT_SIZE, buf);
@@ -430,9 +430,9 @@ int main()
 				if(ret < 0)
 				{
 					if(ret == 0x800D000E)
-						vita2d_pgf_draw_textf(pgf, max_x, y, color, FONT_SIZE, "Not supported on this device");
+						vita2d_pgf_draw_textf(pgf, max_x, y, COLOR_UNA, FONT_SIZE, "Not supported on this device");
 					else
-						vita2d_pgf_draw_textf(pgf, max_x, y, color, FONT_SIZE, "Error %08X", ret);
+						vita2d_pgf_draw_textf(pgf, max_x, y, COLOR_ERR, FONT_SIZE, "Error %08X", ret);
 				}
 				else
 				{
@@ -516,7 +516,7 @@ int main()
 		}
 
 		if(writeRet < 0)
-			vita2d_pgf_draw_textf(pgf, 20, (23 * FONT_Y_SPACE), RED, FONT_SIZE, "Error writing to key: 0x%08X", writeRet);
+			vita2d_pgf_draw_textf(pgf, 20, (23 * FONT_Y_SPACE), COLOR_ERR, FONT_SIZE, "Error writing to key: 0x%08X", writeRet);
 
 		vita2d_end_drawing();
 		vita2d_common_dialog_update();

@@ -26,6 +26,12 @@ enum {
 	KEY_TYPE_BIN=2,
 };
 
+#define COLOR_SEL BLUE
+#define COLOR_DIR CYAN
+#define COLOR_KEY WHITE
+#define COLOR_ERR RED
+#define COLOR_UNA GRAY
+
 // Font
 #define FONT_SIZE 1.0f
 #define FONT_X_SPACE 15.0f
@@ -42,7 +48,7 @@ enum {
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
-//ANALOG
+// ANALOG
 #define ANALOG_CENTER 128
 #define ANALOG_THRESHOLD 64
 #define ANALOG_SENSITIVITY 16
