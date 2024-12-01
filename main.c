@@ -207,7 +207,7 @@ void drawScrollBar(int pos, int n)
 char int2hex[] = "0123456789ABCDEF";
 
 // buf2 needs to be at least 3x sizeof(buf)
-void convert2hex(char *buf, char *buf2, int len)
+void convert2hex(uint8_t *buf, char *buf2, int len)
 {
 	int i;
 	for (i = 0; i < len; i++)
@@ -219,11 +219,11 @@ void convert2hex(char *buf, char *buf2, int len)
 	buf2[3*i+0] = 0;
 }
 
-int convert2bin(char *buf, char *buf2, int len)
+int convert2bin(uint8_t *buf, char *buf2, int len)
 {
 	int cnt = 0;
 	int i;
-	unsigned char tmp;
+	uint8_t tmp;
 
 	tmp = 0;
 	for (i = 0; i < len; i++){
@@ -346,7 +346,7 @@ int main()
 				}
 			else if(key->keyType == KEY_TYPE_BIN)
 			{
-				int ret = convert2bin(buf, output, strlen(output));
+				int ret = convert2bin((uint8_t*)buf, output, strlen(output));
 				if (ret > 0 && ret <= key->keySize) {
 					writeRet = sceRegMgrSetKeyBin(writeDir->name, key->keyName, buf, ret);
 				} else {
@@ -436,7 +436,7 @@ int main()
 				}
 				else
 				{
-					convert2hex(buf, buf2, key->keySize);
+					convert2hex((uint8_t*)buf, buf2, key->keySize);
 					vita2d_pgf_draw_text(pgf, max_x, y, color, FONT_SIZE, buf2);
 				}
 			}
@@ -497,7 +497,7 @@ int main()
 				{
 					ret = sceRegMgrGetKeyBin(curDir->name, key->keyName, buf, key->keySize);
 					if (ret == 0)
-						convert2hex(buf, buf2, key->keySize);
+						convert2hex((uint8_t*)buf, buf2, key->keySize);
 				}
 
 				if(ret >= 0)
